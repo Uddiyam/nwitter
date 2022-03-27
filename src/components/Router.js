@@ -11,8 +11,8 @@ const AppRouter = ({ isLoggedIn, userObj, refreshUser }) => {
             <Routes> {/* Switch가 Routes로 바뀜 */}
                 {isLoggedIn ? (
                     <>
-                    <Route exact path = '/' element = {<Home userObj={userObj} />}/>
-                    <Route exact path = "/profile" element = {<Profile refreshUser={refreshUser} userObj={userObj} />}/>
+                    <Route exact path = '/' element = {<div className="home_style"><Home userObj={userObj} /></div>}/>
+                    <Route exact path = "/profile" element = {<div className="home_style"><Profile refreshUser={refreshUser} userObj={userObj} /></div>}/>
                     </>
                 ) : (
                     <Route exact path = '/' element = {<Auth/>}/>

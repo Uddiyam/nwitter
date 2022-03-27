@@ -1,6 +1,8 @@
 import { dbService, storageService } from "fbase";
 import { useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 const NweetFactory = ({userObj}) => {
 
@@ -9,6 +11,8 @@ const NweetFactory = ({userObj}) => {
 
     const onSubmit = async(event) => {
         event.preventDefault(); // 새로고침 방지
+        if (nweet === "")       // 입력이 없으면 트윗 업데이트 안되도록
+            return;
 
         let attachmentUrl = ""; // 이후 변수의 값 변경 위해 let으로 변수 정의
         if (attachment !== "") {
@@ -57,21 +61,40 @@ const NweetFactory = ({userObj}) => {
     const onClearAttachment = () => setAttachment("");
 
     return (
-        <form onSubmit={onSubmit}>
-        <input
-            value={nweet}
-            onChange={onChange}
-            type="text"
-            placeholder="What's on your mind?"
-            maxLength={120}
-        />
-        <input type = "file" accept = "image/*" onChange={onFileChange} />  {/* type="file" 은 파일 선택, accept 속성을 이용하여 사진만 첨부할 수 있게 함 */}
-        <input type="submit" value="Nweet"/>
-        {attachment && (
-            <div>
-                <img src={attachment} width="50px" height="50px" />
-                <button onClick={onClearAttachment}>Clear</button>
+        <form onSubmit={onSubmit} className="factoryForm">
+            <div className="factoryInput__container">
+                <input
+                    className="factoryInput__input"
+                    value={nweet}
+                    onChange={onChange}
+                    type="text"
+                    placeholder="What's on your mind?"
+                    maxLength={120}
+                />
+                <input type = "submit" value= "&rarr;" className="factoryInput__arrow" />
             </div>
+            <label htmlFor="attach-file" className="factoryInput__label">
+                <span>Add photos</span>
+                <FontAwesomeIcon icon={faPlus} />
+            </label>
+            {/* type="file" 은 파일 선택, accept 속성을 이용하여 사진만 첨부할 수 있게 함 */}
+            <input
+                id="attach-file"
+                type="file"
+                accept="image/*"
+                onChange={onFileChange}
+                style={{
+                    opacity: 0
+                }}
+            />
+            {attachment && (
+                <div className="factoryForm__attachment">
+                    <img src={attachment} style={{backgroundImage: attachment}} />
+                    <div className="factoryForm__clear" onClick={onClearAttachment}>
+                        <span>Remove</span>
+                        <FontAwesomeIcon icon={faTimes} />
+                    </div>
+                </div>
             )}
         </form>
         );
