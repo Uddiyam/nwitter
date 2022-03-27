@@ -21,8 +21,8 @@ const Home = ({ userObj }) => {
 
     useEffect(() => {
         // getNweets();
-        // 실시간 데이터베이스 도입
-        dbService.collection("nweets").onSnapshot((snapshot) => {
+        // 실시간 데이터베이스 도입, 실시간으로 트윗 정렬
+        dbService.collection("nweets").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
             const newArray = snapshot.docs.map((document) => ({
                 id: document.id,
                 ...document.data()
@@ -31,18 +31,23 @@ const Home = ({ userObj }) => {
         });
     }, []);
 
-    return (
-        <div className="container">
-            <NweetFactory  userObj = {userObj} />
-            <div style={{ marginTop: 30 }}> {
-                nweets.map((nweet) => ( <
-                    Nweet key = { nweet.id }
-                    nweetObj = { nweet }
-                    isOwner = { nweet.creatorId === userObj.uid }
-                    />
-                ))}
-            </div>
-        </div>
+    return ( <
+        div className = "container" >
+        <
+        NweetFactory userObj = { userObj }
+        /> <
+        div style = {
+            { marginTop: 30 }
+        } > {
+            nweets.map((nweet) => ( <
+                Nweet key = { nweet.id }
+                nweetObj = { nweet }
+                isOwner = { nweet.creatorId === userObj.uid }
+                />
+            ))
+        } <
+        /div> < /
+        div >
     );
 };
 export default Home;
